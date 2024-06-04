@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.model.Admin;
 import com.example.model.Customer;
+import com.example.model.Login;
 import com.example.repo.AdminRepository;
 import com.example.repo.CustomerRepository;
 
@@ -32,37 +33,11 @@ public class AdminService {
 		return ar.findById(id);
 	}
 
-	public Admin login(String username, String password) {
-		return cr.login(username, password);
+	public Admin login(Login login) {
+		return cr.login(login.getUsername(), login.getPassword());
 	}
 
-	public void depositCheck(int id, float amount) {
-		Optional<Admin> cust = cr.findById(id);
-		float bal = amount + cust.get().getBalance();
-		cust.get().setBalance(bal);
-		cr.save(cust.get());
-
-	}
-
-	public void withdrawalCheck(int id, float amount) {
-		Optional<Admin> cust = cr.findById(id);
-		float bal = cust.get().getBalance() - amount;
-		cust.get().setBalance(bal);
-		cr.save(cust.get());
-
-	}
-
-	public float checkBalance(@RequestBody int id) {
-		Optional<Admin> cust = cr.findById(id);
-		return cust.get().getBalance();
-	}
-
-	public void changePassword(int id, String password) {
-		Optional<Admin> cust = cr.findById(id);
-
-		cust.get().setPassword(password);
-		cr.save(cust.get());
-	}
+	
 
 	public void updateCustomer(int id, Customer cust) {
 		Optional<Customer> oldCustomer = ar.findById(id);
@@ -81,8 +56,7 @@ public class AdminService {
 	}
 	
 	public Customer getOneCustomer(int id) {
-		Customer cust = ar.getOneCustomer(id);
-		return cust;
+		return ar.findById(id).get();
 	}
 	
 	public void deleteCustomer(int id){

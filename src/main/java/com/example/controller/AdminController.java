@@ -32,7 +32,7 @@ public class AdminController {
 	@PostMapping("/login")
 	public Admin login(@RequestBody Login obj) {
 
-		Admin admin = cs.login(obj.getUsername(), obj.getPassword());
+		Admin admin = cs.login(obj);
 
 		return admin;
 
@@ -50,8 +50,8 @@ public class AdminController {
 
 	@PutMapping("/updatecustomer/{id}")
 	public Customer updateCustomer(@PathVariable int id, @RequestBody Customer cust) throws ResourceNotFoundException {
-		Optional.ofNullable(cs.getCustomerById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Customer not found for the id " + id)));
+//		Optional.ofNullable(cs.getCustomerById(id)
+//				.orElseThrow(() -> new ResourceNotFoundException("Customer not found for the id " + id)));
 
 		cs.updateCustomer(id, cust);
 		return cust;
@@ -63,19 +63,20 @@ public class AdminController {
 	}
 
 	@GetMapping("/getonecustomer/{id}")
-	public Customer getOneCustomer(@PathVariable int id) throws ResourceNotFoundException {
+	public Optional<Customer> getOneCustomer(@PathVariable int id) throws ResourceNotFoundException {
 
+		
 		Optional.ofNullable(cs.getCustomerById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Customer not found for the id " + id)));
 
-		return cs.getOneCustomer(id);
+		return cs.getCustomerById(id);
 	}
 	
 	@DeleteMapping("/deletecustomer/{id}")
 	public void deleteCustomer(@PathVariable int id) throws ResourceNotFoundException {
 
-		Optional.ofNullable(cs.getCustomerById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Customer not found for the id " + id)));
+//		Optional.ofNullable(cs.getCustomerById(id)
+//				.orElseThrow(() -> new ResourceNotFoundException("Customer not found for the id " + id)));
 
 		cs.deleteCustomer(id);
 	}
